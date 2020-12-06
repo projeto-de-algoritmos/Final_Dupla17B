@@ -15,6 +15,8 @@ app.config["MONGO_URI"] = "mongodb://paa:21milEmmEa57yKDx@paa-shard-00-00.se53e.
 mongo = PyMongo(app)
 
 
+movies_graph = {}
+
 @app.route('/')
 def index():
     genres = [
@@ -93,12 +95,14 @@ def get_best_matches():
     results = sorted(results, key=itemgetter('score'), reverse=True)[:5]
 
     # ---------------------------------------------------------------
+    #movies_graph = {}
 
     for user in results:
         user_movies_page = requests.get(f"https://letterboxd.com/{user.get('letterbox')}/films/by/member-rating/")
         soup = BeautifulSoup(user_movies_page.content, 'html.parser')
         user_movies = soup.find_all('img', class_='image')[:5]
         user["movies"] = []
+        
         for movie in user_movies:
             movie_name = movie.get('alt')
             movie_genres = requests.get(
@@ -107,10 +111,47 @@ def get_best_matches():
                             "t": movie_name,
                             "apikey": "4a83a64e"}).json()
             movie_genres = movie_genres["Genre"].split(", ")
-            user["movies"].append({"name": movie_name, "genres": movie_genres})
-        
 
-    return render_template('result.html', results=results)
+            if movie_name not in movies_graph:
+                movies_graph[movie_name] = []
+                for genre in movie_genres:
+                    movies_graph[movie_name].append(genre)
+                    if genre not in movies_graph:
+                        #adiciona tag ao grafo
+                        movies_graph[genre] = [movie_name]
+                    else:
+                        #adiciona musica a tag
+                        movies_graph[genre].append(movie_name)
+
+            user["movies"].append({"name": movie_name, "genres": movie_genres})
+
+    # ----------------------------------------------    
+
+    return jsonify(movies_graph)
+
+@app.route('/get_recommendations', methods=['POST'])
+def get_recommendations():
+
+    user_movie = request.json['user_movie']
+    movie_genres = requests.get(
+                "http://www.omdbapi.com/",
+                params={
+                    "t": user_movie,
+                    "apikey": "4a83a64e"}).json()
+    movie_genres = movie_genres["Genre"].split(", ")
+
+    if user_movie not in movies_graph:
+        movies_graph[user_movie] = []
+        for genre in movie_genres:
+            movies_graph[user_movie].append(genre)
+            if genre not in movies_graph:
+                #adiciona tag ao grafo
+                movies_graph[genre] = [user_movie]
+            else:
+                #adiciona musica a tag
+                movies_graph[genre].append(user_movie)
+
+    return jsonify(movies_graph)
 
 
 if __name__ == '__main__':
