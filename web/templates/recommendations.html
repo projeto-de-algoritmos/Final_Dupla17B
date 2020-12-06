@@ -2,7 +2,7 @@
 
     <div class="container mt-4">
         <div class="jumbotron" style="text-align: center;background-color: #bf3e43;">
-            <h1 class="display-4">Aqui estão as suas recomendações</h1>
+            <h1 class="display-4">Here are your recommendations:</h1>
             <p class="lead">Your movie: {{ user_movie }}</p>
   
         </div>
@@ -15,8 +15,8 @@
             {% endif %}
 
             <div class="card mr-4" style="width: 18rem; text-align: center;background-color: #bf3e43;">
-                <a href="{{ 'link' }}"><img src="" class="card-img-top"></a>
-                <div class="card-body">
+                <a href="{{ 'https://www.imdb.com/title/' ~ movie.get('link') }}"><img style="max-height: 320px;" src="{{movie.get('thumbnail')}}" class="card-img-top"></a>
+                <div style="padding: 0;" class="card-body">
                     <h5 class="card-title">{{movie.get('name')}}</h5>
                 </div>
             </div>

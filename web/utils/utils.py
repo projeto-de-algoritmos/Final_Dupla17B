@@ -3,14 +3,17 @@ from operator import itemgetter
 from bs4 import BeautifulSoup
 import requests
 
-def get_movie_genres(movie):
-    movie_genres = requests.get(
+def get_movie_info(movie):
+    movie_info = requests.get(
                 "http://www.omdbapi.com/",
                 params={
                     "t": movie,
                     "apikey": "4a83a64e"}).json()
-    movie_genres = movie_genres["Genre"].split(", ")
-    return movie_genres
+    movie_genres = movie_info["Genre"].split(", ")
+    movie_thumbnail = movie_info["Poster"]
+    movie_link = movie_info["imdbID"]
+
+    return (movie_genres, movie_thumbnail, movie_link)
 
 def get_favorite_movies(users):
 
@@ -23,8 +26,8 @@ def get_favorite_movies(users):
         
         for movie in user_movies:
             movie_name = movie.get('alt')
-            movie_genres = get_movie_genres(movie_name)
-            movies.append({"movie":movie_name, "genres":movie_genres})
+            movie_info = get_movie_info(movie_name)
+            movies.append({"movie":movie_name, "genres":movie_info[0], "thumbnail": movie_info[1], "link":movie_info[2]})
     
     return movies
 

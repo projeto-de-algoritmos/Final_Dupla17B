@@ -3,7 +3,7 @@ from flask_bootstrap import Bootstrap
 from flask import request
 from flask_pymongo import PyMongo
 from flask import jsonify
-from utils.movies import *
+from utils.utils import *
 from utils.moviesGraph import MoviesGraph
 import json
 
@@ -58,9 +58,10 @@ def get_recommendations():
     movies = get_favorite_movies(best_matches)
 
     user_movie = request.form['user_movie']
-    user_movie_genres = get_movie_genres(user_movie)
+    user_movie_info = get_movie_info(user_movie)
 
-    movies.append({"movie":user_movie, "genres":user_movie_genres})
+    movies.append({"movie":user_movie, "genres":user_movie_info[0], 
+                        "thumbnail": user_movie_info[1], "link": user_movie_info[2]})
 
     
     movies_graph = MoviesGraph(movies) 
