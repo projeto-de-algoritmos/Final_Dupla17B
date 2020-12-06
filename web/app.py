@@ -13,6 +13,7 @@ app.config["MONGO_URI"] = "mongodb://paa:21milEmmEa57yKDx@paa-shard-00-00.se53e.
 mongo = PyMongo(app)
 
 
+
 @app.route('/')
 def index():
     genres = [
@@ -53,8 +54,7 @@ def best_matches():
 def get_recommendations():
 
 
-    best_matches = json.loads(request.form['results'])
-
+    best_matches = json.loads(request.form['results'].replace("\'", "\""))
     movies = get_favorite_movies(best_matches)
 
     user_movie = request.form['user_movie']
