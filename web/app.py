@@ -36,10 +36,9 @@ def record_user_preference():
     Inserts a user and his/her respective preferences of movie genres
     '''
     base_order = list(request.json['user_preference'])
-    user_name = request.json['user_name']
     user_letterbox = request.json['user_letterbox']
-    mongo.db.users.insert_one(
-        {'name': user_name, "preference": base_order, 'letterbox': user_letterbox})
+    mongo.db.movie_recommendation.insert_one(
+        {'letterbox': user_letterbox, "preference": base_order})
     return jsonify(success=True), 200
 
 
@@ -50,9 +49,9 @@ def get_best_matches():
     Returns the five users with the least inversions compared to the user making the request
     '''
     base_order = list(request.json['user_preference'])
-    base_user_name = request.json['user_name']
+    base_user_letterbox = request.json['user_letterbox']
 
-    all_users = mongo.db.users.find({}, {"_id": 0})
+    all_users = mongo.db.movie_recommendation.find({}, {"_id": 0})
 
     results = []
     n = len(base_order)
@@ -63,14 +62,13 @@ def get_best_matches():
     # iterating through every recorded user
     for user in all_users:
 
-        user_name = user["name"]
+        user_letterbox = user["letterbox"]
 
         # skipping the user making the request, if he/she has previously been
         # registered
-        if  user_name == base_user_name:
+        if  user_letterbox == base_user_letterbox:
             continue
 
-        user_imdb = user["imdb"]
         user_preference = user["preference"]
 
         # building the array for the user in the current iteration based on the base_order.
@@ -89,27 +87,30 @@ def get_best_matches():
         # making the request
         score = int(100 - ((number_of_inversions / max_inversions) * 100))
 
-        results.append({"name": user_name,
-                        "score": score, "imdb": user_imdb})
+        results.append({"letterbox": user_letterbox, "score": score})
 
     # Getting the five users with the biggest score
     results = sorted(results, key=itemgetter('score'), reverse=True)[:5]
 
     # ---------------------------------------------------------------
 
-    user_movies_page = requests.get(f"https://letterboxd.com/{user}/films/by/member-rating/")
-    soup = BeautifulSoup(user_movies_page.content, 'html.parser')
-    user_movies = soup.find_all('img', class_='image')[:5]
-    for movie in user_movies:
-        movie_name = movie.get('alt')
-        movie_genres = requests.get(
-                    "http://www.omdbapi.com/",
-                    params={
-                        "t": movie_name,
-                        "apikey": "4a83a64e"}).json()
-        movie_genres = movie_genres["Genre"].split(", ")
+    for user in results:
+        user_movies_page = requests.get(f"https://letterboxd.com/{user.get('letterbox')}/films/by/member-rating/")
+        soup = BeautifulSoup(user_movies_page.content, 'html.parser')
+        user_movies = soup.find_all('img', class_='image')[:5]
+        user["movies"] = []
+        for movie in user_movies:
+            movie_name = movie.get('alt')
+            movie_genres = requests.get(
+                        "http://www.omdbapi.com/",
+                        params={
+                            "t": movie_name,
+                            "apikey": "4a83a64e"}).json()
+            movie_genres = movie_genres["Genre"].split(", ")
+            user["movies"].append({"name": movie_name, "genres": movie_genres})
+        
 
-    return render_template('best_matches.html', results=results)
+    return render_template('result.html', results=results)
 
 
 if __name__ == '__main__':
