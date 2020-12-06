@@ -1,0 +1,9 @@
+version: "3.5"
+services:
+  web:
+      build: .
+      command: [sh, -c, "pip install -r requirements.txt && python web/app.py "]
+      ports:
+          - "5000:5000"
+      volumes:
+          - .:/code

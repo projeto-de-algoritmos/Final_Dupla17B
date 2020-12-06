@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>PAA - Movie Partner Recommendation</title>
+    {{ bootstrap.load_css() }}
+    <link rel="stylesheet"
+        href="{{ url_for('static', filename='css/basscss.css') }}">
+    <link rel="stylesheet" href="/static/css/style.css?v=3">
+    <link rel="stylesheet" href="/static/css/compiled_scss.css">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <script src="https://cdn.polyfill.io/v2/polyfill.min.js"></script>
+    <script src="{{ url_for('static', filename='js/html5sortable.js') }}">
+    </script>
+    <script src="/static/js/script.js?v=6"></script>
+
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+        <a class="navbar-brand" href="#">PAA - Movie Partner Recommendation</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item active">
+                    <a class="nav-link" href="/">Inicio <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link"
+                        href="https://github.com/projeto-de-algoritmos/D-C_MovieRecommendation">GitHub</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+
+
+
+    <section id="content" class="h-100">
+
+        <div  class="d-flex align-items-center justify-content-center h-100">
+            <div id="tutorial-text" class="col-3">
+                    Sort the list by dragging the genres accordingly to your preference. The more you like it, the higher it should be.
+            </div>
+
+            <div id="genres" class="col-3">
+
+                <ul class="ml4 js-sortable list list-reset">
+                    {% for genre in genres %}
+
+                    <li id={{ genre }} class="p1 mb1 navy litem" style="position: relative; z-index: 10">{{ genre }}</li>
+
+                    {% endfor %}
+                </ul>
+                <input placeholder="Contact Link" type="text" style="max-width: fit-content;" id="user-contact"
+                    class="form-control ml4 mb-1 ">
+
+                <div class="ml4 input-group mb-1">
+
+                    <div class="input-group-prepend">
+                        <button id="register" class="rounded  button navy" type="button">Register </button>
+                    </div>
+                    <input id="user-name" placeholder="Name" style="max-width: 100px;" type="text" class="form-control">
+                </div>
+
+
+                <button id="find-partner" class="rounded ml4 button navy ">Find me a partner !</button>
+
+
+            </div>
+            <div id="result">
+
+
+            </div>
+
+        </div>
+    </section>
+
+    {{ bootstrap.load_js() }}
+
+</body>
+
+</html>

@@ -1,0 +1,12 @@
+<dl>
+    <dt>
+        These are your best partners to watch a movie today !
+        Sorted by compatibility
+    </dt>
+    {% for result in results %}
+    <a href="{{ result['contact'] }}" style="color:black">
+        <dd class="percentage percentage-{{ result['score'] }}"><span class="text">{{result['name']}}: {{result['score']|string}}%</span></dd>
+    </a>
+    {% endfor %}
+
+</dl>

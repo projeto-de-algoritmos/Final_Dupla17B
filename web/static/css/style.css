@@ -1,0 +1,33 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
+
+html, body{ height: 100%; }      
+body {
+    font-family: 'Poppins';
+    background-image: url("/static/img/background.png");
+    background-size: cover ;
+    background-repeat: no-repeat;
+}
+.litem{
+background-color: #e5b622;
+border-radius: 12px;
+}
+.navbar {
+    background-color: #18181a;
+}
+.button{
+    background-color:#bec2c1;
+}
+#content ul li{
+    font-size: 1.1rem;
+}
+#content {
+    font-size: 1.1rem;
+}
+.dark-bg{
+    background-color: #18181a;
+}
+#tutorial-text{
+    font-weight: 700;
+    font-size: 1.2em;
+    font-weight: 700;
+}
