@@ -1,8 +1,13 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
 
-html, body{ height: 100%; }      
+html, body{ height: 100%; }     
 body {
     font-family: 'Poppins';
+    background-image: url("/static/img/background.png");
+    background-size: fill ;
+    background-repeat: no-repeat;
+}
+#content {
     background-image: url("/static/img/background.png");
     background-size: cover ;
     background-repeat: no-repeat;

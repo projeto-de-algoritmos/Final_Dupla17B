@@ -1,43 +1,7 @@
-<!DOCTYPE html>
-<html lang="en">
+{% include "header.html" %}
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>PAA - Movie Recommendation</title>
-    {{ bootstrap.load_css() }}
-    <style>
-        body{
-            background-image: 'static/img/recommendation-bg.jpg';
-            background-size: cover ;
-            background-repeat: no-repeat;
-        }
-
-    </style>
-
-</head>
-
-<body>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <a class="navbar-brand" href="#">PAA - Movie Recommendation</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
-            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav">
-                <li class="nav-item active">
-                    <a class="nav-link" href="/">Inicio <span class="sr-only">(current)</span></a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="https://github.com/projeto-de-algoritmos/Grafos1_SongRecommendation">GitHub</a>
-                </li>
-            </ul>
-        </div>
-    </nav>
     <div class="container mt-4">
-        <div class="jumbotron" style="text-align: center;">
+        <div class="jumbotron" style="text-align: center;background-color: #bf3e43;">
             <h1 class="display-4">Aqui estão as suas recomendações</h1>
             <p class="lead">Your movie: {{ user_movie }}</p>
   
@@ -50,7 +14,7 @@
         <div class="row justify-content-center mt-4 mb-4">
             {% endif %}
 
-            <div class="card mr-4" style="width: 18rem; text-align: center;">
+            <div class="card mr-4" style="width: 18rem; text-align: center;background-color: #bf3e43;">
                 <a href="{{ 'link' }}"><img src="" class="card-img-top"></a>
                 <div class="card-body">
                     <h5 class="card-title">{{movie.get('name')}}</h5>
@@ -65,9 +29,4 @@
 
     </div>
 
-
-    {{ bootstrap.load_js() }}
-
-</body>
-
-</html>
+{% include "footer.html" %}

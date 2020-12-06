@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>PAA - Movie Recommendation</title>
+    {{ bootstrap.load_css() }}
+    <link rel="stylesheet"
+        href="{{ url_for('static', filename='css/basscss.css') }}">
+    <link rel="stylesheet" href="/static/css/style.css?2222wzv=32">
+    <link rel="stylesheet" href="/static/css/compiled_scss.css">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <script src="https://cdn.polyfill.io/v2/polyfill.min.js"></script>
+    <script src="{{ url_for('static', filename='js/html5sortable.js') }}">
+    </script>
+    <script src="/static/js/script.js?v=24z26"></script>
+
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+        <a class="navbar-brand" href="#">PAA - Movie Recommendation</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item active">
+                    <a class="nav-link" href="/">Inicio <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link"
+                        href="https://github.com/projeto-de-algoritmos/D-C_MovieRecommendation">GitHub</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
