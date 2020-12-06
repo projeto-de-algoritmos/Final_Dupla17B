@@ -9,7 +9,7 @@
     {{ bootstrap.load_css() }}
     <link rel="stylesheet"
         href="{{ url_for('static', filename='css/basscss.css') }}">
-    <link rel="stylesheet" href="/static/css/style.css?v=3">
+    <link rel="stylesheet" href="/static/css/style.css?zv=3">
     <link rel="stylesheet" href="/static/css/compiled_scss.css">
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -17,7 +17,7 @@
     <script src="https://cdn.polyfill.io/v2/polyfill.min.js"></script>
     <script src="{{ url_for('static', filename='js/html5sortable.js') }}">
     </script>
-    <script src="/static/js/script.js?v=6"></script>
+    <script src="/static/js/script.js?v=z6"></script>
 
 </head>
 
@@ -49,6 +49,11 @@
         <div  class="d-flex align-items-center justify-content-center h-100">
             <div id="tutorial-text" class="col-3">
                     Sort the list by dragging the genres accordingly to your preference. The more you like it, the higher it should be.
+                
+                <input placeholder="Your Letterbox user" type="text" style="max-width: fit-content;" id="user-letterbox"
+                    class="form-control mb-1 mt1 ">
+                <button id="register" class="rounded  mb-1  button navy" type="button">Register me</button>
+                <button id="find-partner" class="rounded  button navy ">Get Recommendations</button>
             </div>
 
             <div id="genres" class="col-3">
@@ -60,19 +65,7 @@
 
                     {% endfor %}
                 </ul>
-                <input placeholder="Contact Link" type="text" style="max-width: fit-content;" id="user-contact"
-                    class="form-control ml4 mb-1 ">
 
-                <div class="ml4 input-group mb-1">
-
-                    <div class="input-group-prepend">
-                        <button id="register" class="rounded  button navy" type="button">Register </button>
-                    </div>
-                    <input id="user-name" placeholder="Name" style="max-width: 100px;" type="text" class="form-control">
-                </div>
-
-
-                <button id="find-partner" class="rounded ml4 button navy ">Find me a partner !</button>
 
 
             </div>
