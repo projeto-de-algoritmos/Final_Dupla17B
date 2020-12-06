@@ -15,8 +15,6 @@ app.config["MONGO_URI"] = "mongodb://paa:21milEmmEa57yKDx@paa-shard-00-00.se53e.
 mongo = PyMongo(app)
 
 
-movies_graph = {}
-
 @app.route('/')
 def index():
     genres = [
@@ -92,12 +90,21 @@ def get_best_matches():
         results.append({"letterbox": user_letterbox, "score": score})
 
     # Getting the five users with the biggest score
-    results = sorted(results, key=itemgetter('score'), reverse=True)[:5]
+    results = sorted(results, key=itemgetter('score'), reverse=True)[:5] 
 
-    # ---------------------------------------------------------------
-    #movies_graph = {}
+    return jsonify(results)
 
-    for user in results:
+@app.route('/get_recommendations', methods=['POST'])
+def get_recommendations():
+
+
+    best_matches = list(request.json['best_matches'])
+
+    movies_graph = {}
+    movies_list = []
+
+
+    for user in best_matches:
         user_movies_page = requests.get(f"https://letterboxd.com/{user.get('letterbox')}/films/by/member-rating/")
         soup = BeautifulSoup(user_movies_page.content, 'html.parser')
         user_movies = soup.find_all('img', class_='image')[:5]
@@ -113,6 +120,7 @@ def get_best_matches():
             movie_genres = movie_genres["Genre"].split(", ")
 
             if movie_name not in movies_graph:
+                movies_list.append(movie_name)
                 movies_graph[movie_name] = []
                 for genre in movie_genres:
                     movies_graph[movie_name].append(genre)
@@ -125,12 +133,6 @@ def get_best_matches():
 
             user["movies"].append({"name": movie_name, "genres": movie_genres})
 
-    # ----------------------------------------------    
-
-    return jsonify(movies_graph)
-
-@app.route('/get_recommendations', methods=['POST'])
-def get_recommendations():
 
     user_movie = request.json['user_movie']
     movie_genres = requests.get(
@@ -141,6 +143,7 @@ def get_recommendations():
     movie_genres = movie_genres["Genre"].split(", ")
 
     if user_movie not in movies_graph:
+        movies_list.append(user_movie)
         movies_graph[user_movie] = []
         for genre in movie_genres:
             movies_graph[user_movie].append(genre)
@@ -151,7 +154,84 @@ def get_recommendations():
                 #adiciona musica a tag
                 movies_graph[genre].append(user_movie)
 
-    return jsonify(movies_graph)
+    # --------------------------------------------------------------
+    def predecessor(G, start):
+        '''
+        Recebe o grafo e o nó inicial
+        Retorna uma  dict de "pais" pra cada nó
+        '''
+        if start not in G:
+            raise False
+
+        level = 0  
+        nextlevel = [start]  
+        explored = {start: level}  
+        pred = {start: []}  
+        while nextlevel:
+            level = level + 1
+            thislevel = nextlevel
+            nextlevel = []
+            for v in thislevel:
+                for w in G[v]:
+                    if w not in explored:
+                        pred[w] = [v]
+                        explored[w] = level
+                        nextlevel.append(w)
+                    elif explored[w] == level:  
+                        pred[w].append(v)  
+
+        return pred
+
+    def find_paths(start, target, pred):
+        '''
+        Recebe um nó inicial, um nó final e um dicionario contendo os pais de cada nó
+        Gera um objeto com todos os menores caminhos entre o nó inicial e o nó final
+        '''
+        if target not in pred or {target}==start:
+            return None
+
+        explored = {target}
+        stack = [[target, 0]]
+        top = 0
+        while top >= 0:
+            node, i = stack[top]
+            if node in start:
+                yield [p for p, n in reversed(stack[: top + 1])]
+            if len(pred[node]) > i:
+                stack[top][1] = i + 1
+                next = pred[node][i]
+                if next in explored:
+                    continue
+                else:
+                    explored.add(next)
+                top += 1
+                if top == len(stack):
+                    stack.append([next, 0])
+                else:
+                    stack[top][:] = [next, 0]
+            else:
+                explored.discard(node)
+                top -= 1
+
+
+    best_matches = []
+
+    #para cada musica na lista de musicas, guardar o tamanho do menor caminho e o número de menores caminhos
+    for node in movies_list:
+        parentage = predecessor(movies_graph, node)
+        paths = list(find_paths({node}, user_movie, parentage))
+        if paths != []:
+            num_paths = len(paths)
+            path_lenght = len(paths[0])
+            
+            #não consideramos caminhos com comprimento maior que 5 pois isso seria uma relação muito fraca.
+            if path_lenght <=5:
+                best_matches.append({'name':node,'lenght':path_lenght,'number':num_paths})
+
+    #ordenamos as sugestões por comprimento do caminho mais curto e quantidade de caminhos mais curtos
+    best_matches = sorted(best_matches, key=lambda k: (k['lenght'], -k['number']))
+
+    return jsonify(best_matches)
 
 
 if __name__ == '__main__':
