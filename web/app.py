@@ -5,6 +5,8 @@ from flask import request
 from flask_pymongo import PyMongo
 from flask import jsonify
 from operator import itemgetter
+from bs4 import BeautifulSoup
+import requests
 
 
 app = Flask(__name__)
@@ -35,9 +37,9 @@ def record_user_preference():
     '''
     base_order = list(request.json['user_preference'])
     user_name = request.json['user_name']
-    user_contact = request.json['user_contact']
+    user_letterbox = request.json['user_letterbox']
     mongo.db.users.insert_one(
-        {'name': user_name, "preference": base_order, 'contact': user_contact})
+        {'name': user_name, "preference": base_order, 'letterbox': user_letterbox})
     return jsonify(success=True), 200
 
 
@@ -68,7 +70,7 @@ def get_best_matches():
         if  user_name == base_user_name:
             continue
 
-        user_contact = user["contact"]
+        user_imdb = user["imdb"]
         user_preference = user["preference"]
 
         # building the array for the user in the current iteration based on the base_order.
@@ -88,10 +90,25 @@ def get_best_matches():
         score = int(100 - ((number_of_inversions / max_inversions) * 100))
 
         results.append({"name": user_name,
-                        "score": score, "contact": user_contact})
+                        "score": score, "imdb": user_imdb})
 
     # Getting the five users with the biggest score
     results = sorted(results, key=itemgetter('score'), reverse=True)[:5]
+
+    # ---------------------------------------------------------------
+
+    user_movies_page = requests.get(f"https://letterboxd.com/{user}/films/by/member-rating/")
+    soup = BeautifulSoup(user_movies_page.content, 'html.parser')
+    user_movies = soup.find_all('img', class_='image')[:5]
+    for movie in user_movies:
+        movie_name = movie.get('alt')
+        movie_genres = requests.get(
+                    "http://www.omdbapi.com/",
+                    params={
+                        "t": movie_name,
+                        "apikey": "4a83a64e"}).json()
+        movie_genres = movie_genres["Genre"].split(", ")
+
     return render_template('best_matches.html', results=results)
 
 
