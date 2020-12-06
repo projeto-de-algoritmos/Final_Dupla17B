@@ -16,10 +16,10 @@ class MoviesGraph(object):
                 for genre in movie_genres:
                     self.movies_graph[movie_name].append(genre)
                     if genre not in self.movies_graph:
-                        #adiciona tag ao grafo
+                        #adiciona genero ao grafo
                         self.movies_graph[genre] = [movie_name]
                     else:
-                        #adiciona musica a tag
+                        #adiciona filme a genero
                         self.movies_graph[genre].append(movie_name)
 
     def get_movies_list(self):
@@ -92,7 +92,7 @@ class MoviesGraph(object):
     def get_movie_recommendations(self, user_movie):
         recommendations = []
 
-        #para cada musica na lista de musicas, guardar o tamanho do menor caminho e o número de menores caminhos
+        #para cada filme na lista de musicas, guardar o tamanho do menor caminho e o número de menores caminhos
         for node in self.movies_list:
             parentage = self.predecessor(node)
             paths = list(self.find_paths({node}, user_movie, parentage))

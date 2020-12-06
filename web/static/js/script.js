@@ -58,14 +58,14 @@ $(function () {
 
         $('#tutorial-text').fadeOut(300, function(){ $(this).remove();});
 
-        var user_letterbox = $("#user_letterbox").val();
+        var user_letterbox = $("#user-letterbox").val();
 
         if (user_preference.length == 0) {
             sortable('.js-sortable', 'serialize')[0].items.forEach(element => { user_preference.push(element.node.id) });
         }
 
         $.ajax({
-            url: "/get_best_matches",
+            url: "/best_matches",
             type: "POST",
             contentType: 'application/json',
             data: JSON.stringify({

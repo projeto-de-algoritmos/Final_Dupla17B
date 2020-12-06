@@ -5,7 +5,7 @@ from flask_pymongo import PyMongo
 from flask import jsonify
 from utils.movies import *
 from utils.moviesGraph import MoviesGraph
-
+import json
 
 app = Flask(__name__)
 bootstrap = Bootstrap(app)
@@ -47,17 +47,17 @@ def best_matches():
     base_user_letterbox = request.json['user_letterbox']
     all_users = mongo.db.movie_recommendation.find({}, {"_id": 0})
     results = get_best_matches(base_order,base_user_letterbox,all_users)
-    return jsonify(results)
+    return render_template('best_matches.html', results=results)
 
 @app.route('/get_recommendations', methods=['POST'])
 def get_recommendations():
 
 
-    best_matches = list(request.json['best_matches'])
+    best_matches = json.loads(request.form['results'])
 
     movies = get_favorite_movies(best_matches)
 
-    user_movie = request.json['user_movie']
+    user_movie = request.form['user_movie']
     user_movie_genres = get_movie_genres(user_movie)
 
     movies.append({"movie":user_movie, "genres":user_movie_genres})
@@ -66,8 +66,7 @@ def get_recommendations():
     movies_graph = MoviesGraph(movies) 
     recommendations = movies_graph.get_movie_recommendations(user_movie)
 
-
-    return jsonify(recommendations)
+    return render_template('recommendations.html', recommendations=recommendations, user_movie=user_movie)
 
 
 if __name__ == '__main__':

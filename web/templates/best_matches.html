@@ -1,11 +1,23 @@
 <dl>
     <dt>
-        These are your best partners to watch a movie today !
-        Sorted by compatibility
+        Here are some of the users we found with a similar taste.
+        They will build your group of possible recommendations.
+        Now give us a movie you like and we'll recommend you others based on it
+        
+            <form action="/get_recommendations" method="POST">
+                <div class="ml-5 input-group mb-1 mt1">
+                <div class="input-group-prepend">
+                    <button  type="submit" id="get-movies" class="rounded  button navy">Get Movies</button>
+                </div>
+                <input name="user_movie" placeholder="Movie name" style="max-width: 180px;" type="text" class="form-control">
+                <input type="hidden"  name="results" value="{{ ...|results }}">    
+            </div>
+            </form>
     </dt>
+
     {% for result in results %}
-    <a href="{{ result['contact'] }}" style="color:black">
-        <dd class="percentage percentage-{{ result['score'] }}"><span class="text">{{result['name']}}: {{result['score']|string}}%</span></dd>
+    <a href="{{ 'https://letterboxd.com/' ~ result['letterbox'] }}" style="color:black">
+        <dd class="percentage percentage-{{ result['score'] }}"><span class="text">{{result['letterbox']}}: {{result['score']|string}}%</span></dd>
     </a>
     {% endfor %}
 
