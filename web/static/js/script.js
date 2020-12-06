@@ -18,7 +18,7 @@ $(function () {
 
     $("#register").click(function () {
 
-        var user_letterbox = $("#user_letterbox").val();
+        var user_letterbox = $("#user-letterbox").val();
 
         if (!user_letterbox) {
             var failure = '<div id="failure" class="ml4 alert alert-danger"><p>Letterbox username cannot be empty</p></div>'
