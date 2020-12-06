@@ -1,5 +1,32 @@
 from utils.countInversions import countInversions
 from operator import itemgetter
+from bs4 import BeautifulSoup
+import requests
+
+def get_movie_genres(movie):
+    movie_genres = requests.get(
+                "http://www.omdbapi.com/",
+                params={
+                    "t": movie,
+                    "apikey": "4a83a64e"}).json()
+    movie_genres = movie_genres["Genre"].split(", ")
+    return movie_genres
+
+def get_favorite_movies(users):
+
+    movies = []
+
+    for user in users:
+        user_movies_page = requests.get(f"https://letterboxd.com/{user.get('letterbox')}/films/by/member-rating/")
+        soup = BeautifulSoup(user_movies_page.content, 'html.parser')
+        user_movies = soup.find_all('img', class_='image')[:5]
+        
+        for movie in user_movies:
+            movie_name = movie.get('alt')
+            movie_genres = get_movie_genres(movie_name)
+            movies.append({"movie":movie_name, "genres":movie_genres})
+    
+    return movies
 
 def get_best_matches(base_order,base_user,all_users):   
     '''
