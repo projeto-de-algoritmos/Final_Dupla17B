@@ -1,17 +1,19 @@
 from flask import Flask, render_template
+from flask import request, session
+from flask import jsonify, send_file
 from flask_bootstrap import Bootstrap
-from flask import request
 from flask_pymongo import PyMongo
-from flask import jsonify
 from utils.utils import *
 from utils.moviesGraph import MoviesGraph
+from utils.graphImage import GraphImage
 import json
+import os
 
 app = Flask(__name__)
+app.secret_key = os.urandom(24)
 bootstrap = Bootstrap(app)
 app.config["MONGO_URI"] = "mongodb://paa:21milEmmEa57yKDx@paa-shard-00-00.se53e.mongodb.net:27017,paa-shard-00-01.se53e.mongodb.net:27017,paa-shard-00-02.se53e.mongodb.net:27017/movie_recommendation?ssl=true&replicaSet=atlas-10i7up-shard-0&authSource=admin&retryWrites=true&w=majority"
 mongo = PyMongo(app)
-
 
 
 @app.route('/')
@@ -48,13 +50,14 @@ def best_matches():
     base_user_letterbox = request.json['user_letterbox']
     all_users = mongo.db.movie_recommendation.find({}, {"_id": 0})
     results = get_best_matches(base_order,base_user_letterbox,all_users)
+    session["best_matches"] = results
     return render_template('best_matches.html', results=results)
 
 @app.route('/get_recommendations', methods=['POST'])
 def get_recommendations():
 
 
-    best_matches = json.loads(request.form['results'].replace("\'", "\""))
+    best_matches = session["best_matches"]
     movies = get_favorite_movies(best_matches)
 
     user_movie = request.form['user_movie']
@@ -66,8 +69,35 @@ def get_recommendations():
     
     movies_graph = MoviesGraph(movies) 
     recommendations = movies_graph.get_movie_recommendations(user_movie)
+    
+    session["adjacency_list"] = movies_graph.get_movies_graph()
+    session["movies_list"] = movies_graph.get_movies_list()
 
-    return render_template('recommendations.html', recommendations=recommendations, user_movie=user_movie)
+
+    return render_template('recommendations.html', recommendations=recommendations, 
+                user_movie=user_movie)
+
+
+@app.route('/render_graph_images/<layout>')
+def render_graph_images(layout):
+
+    adjacency_list = session["adjacency_list"]
+    movies_list = [movie[0] for movie in session["movies_list"]]
+
+
+    if layout == "default":
+        img = GraphImage(adjacency_list).render_graph_image()
+    else:
+        img = GraphImage(adjacency_list).render_bipartide_graph_image(movies_list)
+
+    return send_file(img, mimetype='image/png')
+
+
+
+@app.route('/view_graph_images/<layout>')
+def view_graph_images(layout):
+
+    return render_template('view_graphs.html', layout=layout)
 
 
 if __name__ == '__main__':
