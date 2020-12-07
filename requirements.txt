@@ -4,3 +4,5 @@ requests
 bootstrap-flask
 Flask-PyMongo
 bs4
+matplotlib
+networkx
