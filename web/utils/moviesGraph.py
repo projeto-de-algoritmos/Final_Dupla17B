@@ -1,7 +1,13 @@
 class MoviesGraph(object): 
-  
-    # default constructor 
+    '''
+    Our Movies graph class
+    '''
+
     def __init__(self, movies): 
+        '''
+        Builds an adjacency list with all the movies and genres
+        Also builds a list just with the movie names for later use 
+        '''
         self.movies_graph = {}
         self.movies_list = []
 
@@ -14,14 +20,19 @@ class MoviesGraph(object):
 
             if movie_name not in self.movies_graph:
                 self.movies_list.append((movie_name, movie_thumb, movie_link))
+
+                # adds movie to graph
                 self.movies_graph[movie_name] = []
                 for genre in movie_genres:
+
+                    # adds genre to movie
                     self.movies_graph[movie_name].append(genre)
+
+                    # adds movie to genre
                     if genre not in self.movies_graph:
-                        #adiciona genero ao grafo
+                        # also adds genre to graph
                         self.movies_graph[genre] = [movie_name]
                     else:
-                        #adiciona filme a genero
                         self.movies_graph[genre].append(movie_name)
 
     def get_movies_list(self):
@@ -34,8 +45,9 @@ class MoviesGraph(object):
 
     def predecessor(self, start):
         '''
-        Recebe o grafo e o nó inicial
-        Retorna uma  dict de "pais" pra cada nó
+        Receives a starting node 
+        and returns a dict with the predecessors
+        of each node in the graph
         '''
         G = self.movies_graph
         if start not in G:
@@ -62,8 +74,8 @@ class MoviesGraph(object):
 
     def find_paths(self, start, target, pred):
         '''
-        Recebe um nó inicial, um nó final e um dicionario contendo os pais de cada nó
-        Gera um objeto com todos os menores caminhos entre o nó inicial e o nó final
+        Receives an initial node, a target node and a dict of all the nodes predecessors
+        Generates an object with all the shortest paths between start and target node
         '''
         if target not in pred or {target}==start:
             return None
@@ -92,20 +104,30 @@ class MoviesGraph(object):
                 top -= 1
 
     def get_movie_recommendations(self, user_movie):
+        '''
+        Receives a movie name and returns a list 
+        of movies sorted by the length and the number of shortest paths
+        to the starting movie
+        '''
+
         recommendations = []
 
-        #para cada filme na lista de musicas, guardar o tamanho do menor caminho e o número de menores caminhos
+        # for each movie in the list, keep the length and the number of shortest paths 
         for movie, thumb, link in self.movies_list:
+
+            # get parentage
             parentage = self.predecessor(movie)
+
+            # get paths
             paths = list(self.find_paths({movie}, user_movie, parentage))
             if paths != []:
                 num_paths = len(paths)
                 path_lenght = len(paths[0])
                 
-                #não consideramos caminhos com comprimento maior que 5 pois isso seria uma relação muito fraca.
+                # disconsidering any path length higher than five. As they would represent too weak relationships
                 if path_lenght <=5:
                     recommendations.append({'name':movie,'lenght':path_lenght,
                             'number':num_paths, 'thumbnail':thumb, 'link':link})
 
-        #ordenamos as sugestões por comprimento do caminho mais curto e quantidade de caminhos mais curtos
+        # sorting the list by the lenght of the shortest path and the number of shortest paths
         return sorted(recommendations, key=lambda k: (k['lenght'], -k['number']))

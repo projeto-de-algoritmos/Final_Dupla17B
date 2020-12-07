@@ -4,6 +4,10 @@ from bs4 import BeautifulSoup
 import requests
 
 def get_movie_info(movie):
+    '''
+    Uses the OMDB API to get movie info from IMDb
+    Returns genres, thumbnail and imdb link for a given movie
+    '''
     movie_info = requests.get(
                 "http://www.omdbapi.com/",
                 params={
@@ -16,16 +20,31 @@ def get_movie_info(movie):
     return (movie_genres, movie_thumbnail, movie_link)
 
 def get_favorite_movies(users):
+    '''
+    Uses Web scraping with BeautifulSoup to get 
+    the five favorite movies of each user on letterbox
+    and builds a list with info from all of them 
+    '''
 
     movies = []
 
     for user in users:
+
+        # downloading user's letterbox page of top rated watched movies
         user_movies_page = requests.get(f"https://letterboxd.com/{user.get('letterbox')}/films/by/member-rating/")
+
+        # using beautiful soap to parse the webpage
         soup = BeautifulSoup(user_movies_page.content, 'html.parser')
+
+        # getting just the five movies names with the highest rating
         user_movies = soup.find_all('img', class_='image')[:5]
         
         for movie in user_movies:
+
+            # the movie name is in the alt attribute 
             movie_name = movie.get('alt')
+
+            # getting movie info from OMDB api
             movie_info = get_movie_info(movie_name)
             movies.append({"movie":movie_name, "genres":movie_info[0], "thumbnail": movie_info[1], "link":movie_info[2]})
     
