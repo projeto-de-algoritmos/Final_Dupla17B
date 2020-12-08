@@ -47,6 +47,8 @@ Mas, se preferir ver o projeto funcionando localmente, para instalar basta segui
 * Passo 2: Neste passo, é dada a você uma lista com algumas das pessoas que tem um gosto similar ao seu. Se você clicar em alguma delas irá ser redirecionado ao perfil no letterbox dessa pessoa, para que você descobrir mais sobre seus gostos.
 * Passo 3: Neste passo, você recebe a lista de filmes sugeridos. É possível clicar em qualquer um deles para ver suas informações no IMDb.
 
+#### Video
+Também está disponível no repositório um vídeo mostrando a aplicação rodando e o passo a passo dela. Se preferir, ele também está disponível através deste [link](https://drive.google.com/file/d/14bqeerhEbMhjrIg1fUalcCYkurG6uTiR/view?usp=sharing)
 
 ## Referências 
 ZHANG, Xuejian; ZHAO, Zhongying; LI, Chao; Yong; Jianli. An Interpretable and Scalable Recommendation Method Based on Network Embedding. IEEE Access, vol. 7, p. 9384–9394, 2019. DOI 10.1109/access.2019.2891513. Available at: http://dx.doi.org/10.1109/ACCESS.2019.2891513.
