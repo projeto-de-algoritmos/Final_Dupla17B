@@ -48,6 +48,10 @@ Mas, se preferir ver o projeto funcionando localmente, para instalar basta segui
 * Passo 3: Neste passo, você recebe a lista de filmes sugeridos. É possível clicar em qualquer um deles para ver suas informações no IMDb.
 
 
+## Referências 
+ZHANG, Xuejian; ZHAO, Zhongying; LI, Chao; Yong; Jianli. An Interpretable and Scalable Recommendation Method Based on Network Embedding. IEEE Access, vol. 7, p. 9384–9394, 2019. DOI 10.1109/access.2019.2891513. Available at: http://dx.doi.org/10.1109/ACCESS.2019.2891513.
+
+JANG; KIM; Woo HA. Graph-based Recommendation Systems: Comparison Analysis between Traditional Clustering Techniques and Neural Embedding. Stanford University, Department of Computer Science. CA 94305. Available at: http://snap.stanford.edu/class/cs224w-2017/projects/cs224w-58-final.pdf
 
 
 
