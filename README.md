@@ -12,7 +12,7 @@ Esse projeto tem como finalidade te ajudar a decidir um bom filme para assistir.
 utiliza da sua ordem de preferência em relação a possíveis gêneros e então te coloca em um grupo de usuários
 com gostos semelhantes.
 
-Com isso feito, é montado um grafo relacionando os cinco filmes favoritos de cada um dos usuários no seu grupo e seus respectivos gêneros. Nesse grafo é inserido um outro filme de sua escolha, que servirá de referência para as recomendações.
+Com isso feito, é montado um grafo relacionando os cinco filmes favoritos de cada um dos usuários no seu grupo e seus respectivos gêneros. Esses filmes são obtidos através do perfil de cada usuário no Letterbox, por web scraping. Nesse grafo é inserido um outro filme de sua escolha, que servirá de referência para as recomendações.
 
 Por fim, é montada uma lista de sugestões ordenada pelos filmes que possuem mais relações significativas com o seu. Isso é feito calculando o número de menores caminhos de outros filmes até ele.
 
