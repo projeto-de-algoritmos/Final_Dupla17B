@@ -12,7 +12,7 @@ Esse projeto tem como finalidade te ajudar a decidir um bom filme para assistir.
 utiliza da sua ordem de preferência em relação a possíveis gêneros e então te coloca em um grupo de usuários
 com gostos semelhantes.
 
-Com isso feito, é montado um grafo relacionando os cinco filmes favoritos de cada um dos usuários no seu grupo e seus respectivos gêneros. Nesse grafo é inserido um outro filme de sua escolha, que servirá de referência para as recomendações.
+Com isso feito, é montado um grafo relacionando os cinco filmes favoritos de cada um dos usuários no seu grupo e seus respectivos gêneros. Esses filmes são obtidos através do perfil de cada usuário no Letterbox, por web scraping. Nesse grafo é inserido um outro filme de sua escolha, que servirá de referência para as recomendações.
 
 Por fim, é montada uma lista de sugestões ordenada pelos filmes que possuem mais relações significativas com o seu. Isso é feito calculando o número de menores caminhos de outros filmes até ele.
 
@@ -48,6 +48,10 @@ Mas, se preferir ver o projeto funcionando localmente, para instalar basta segui
 * Passo 3: Neste passo, você recebe a lista de filmes sugeridos. É possível clicar em qualquer um deles para ver suas informações no IMDb.
 
 
+## Referências 
+ZHANG, Xuejian; ZHAO, Zhongying; LI, Chao; Yong; Jianli. An Interpretable and Scalable Recommendation Method Based on Network Embedding. IEEE Access, vol. 7, p. 9384–9394, 2019. DOI 10.1109/access.2019.2891513. Available at: http://dx.doi.org/10.1109/ACCESS.2019.2891513.
+
+JANG; KIM; Woo HA. Graph-based Recommendation Systems: Comparison Analysis between Traditional Clustering Techniques and Neural Embedding. Stanford University, Department of Computer Science. CA 94305. Available at: http://snap.stanford.edu/class/cs224w-2017/projects/cs224w-58-final.pdf
 
 
 
