@@ -13,6 +13,11 @@ def get_movie_info(movie):
                 params={
                     "t": movie,
                     "apikey": "4a83a64e"}).json()
+
+    # returning error if movie is not found
+    if "Error" in movie_info:
+        return {"Error": "Movie not found"}
+
     movie_genres = movie_info["Genre"].split(", ")
     movie_thumbnail = movie_info["Poster"]
     movie_link = movie_info["imdbID"]

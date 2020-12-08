@@ -82,15 +82,19 @@ def get_recommendations():
     for the user
     '''
 
+    # getting the info for the base movie 
+    user_movie = request.form['user_movie']
+    user_movie_info = get_movie_info(user_movie)
+
+    if "Error" in user_movie_info:
+        return render_template('error.html', error="Movie not found")
+
     best_matches = session["best_matches"]
 
     # getting the five favorite movies of all users and their respective infos
     movies = get_favorite_movies(best_matches)
 
     # adding request user's movie, to be used as the base for the recommendation
-    user_movie = request.form['user_movie']
-    user_movie_info = get_movie_info(user_movie)
-
     movies.append({"movie":user_movie, "genres":user_movie_info[0], 
                         "thumbnail": user_movie_info[1], "link": user_movie_info[2]})
 
